@@ -8,6 +8,7 @@ import messageData from './messageData.json';
 class App extends Component {
   constructor() {
     super();
+    // set initial state from JSON
     this.state = {
       currentUser: messageData.currentUser,
       messages: messageData.messages 
@@ -16,6 +17,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    console.log("Connected to server")
     console.log("componentDidMount <App />");
     setTimeout(() => {
       console.log("Simulating incoming message");
@@ -45,11 +47,11 @@ class App extends Component {
     const messages = this.state.messages;
     const addNewMessage = this.addNewMessage;
     return (<div>
-    	<nav className="navbar">
-		  <a href="/" className="navbar-brand">Chatty</a>
-		</nav>
-    	<MessageList messages={messages}/>
-      	<ChatBar currentUser={currentUser} addNewMessage={addNewMessage}/>
+      <nav className="navbar">
+      <a href="/" className="navbar-brand">Chatty</a>
+    </nav>
+      <MessageList messages={messages}/>
+        <ChatBar currentUser={currentUser} addNewMessage={addNewMessage}/>
       </div>
     );
   };
