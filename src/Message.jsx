@@ -5,9 +5,9 @@ class Message extends Component {
 		return (  <div className="message">
 				    <span className="message-username">{this.props.messageData.username}</span>
 				    <span className="message-content">{this.props.messageData.content}</span>
-				  </div>)
-	}
-}
+				  </div>);
+	};
+};
 
 
-export default Message
+export default Message;
