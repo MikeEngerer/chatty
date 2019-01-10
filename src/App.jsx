@@ -46,9 +46,8 @@ class App extends Component {
     const newUsername = {
       name: username
     };
-    console.log(newUsername)
+    console.log("username changed to:", newUsername.name)
     this.setState({currentUser:newUsername})
-    console.log(this.state)
   };
 
   handleNewMessage(message) {
@@ -74,4 +73,5 @@ class App extends Component {
     );
   };
 };
+
 export default App;
