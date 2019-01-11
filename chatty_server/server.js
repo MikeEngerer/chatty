@@ -30,29 +30,58 @@ wss.broadcast = (data) => {
 }
 
 wss.on('connection', (ws) => {
-  console.log('Client connected')
+  const togglePlural = wss._server._connections > 1 ? "s" : "";
+  const isOrAre = wss._server._connections > 1 ? "are" : "is";
+  const newConnection = {
+    type: 'incomingNotification',
+    content: `New user connected! There ${isOrAre} now ${wss._server._connections} active user${togglePlural}.`,
+    count: wss._server._connections,
+    id: uuidv4()
+  }
+  console.log('Client connected, count:', wss._server._connections)
+  wss.broadcast(JSON.stringify(newConnection))
+
   ws.on('message', (data) => {
     const parsedData = JSON.parse(data);
     switch (parsedData.type) {
       case 'postNotification':
+
         const notification = {
           type: 'incomingNotification',
           username: parsedData.name,
+          count: wss._server._connections,
           content: `${parsedData.oldName} changed their name to ${parsedData.newName}`,
           id: uuidv4()
         }
+
         wss.broadcast(JSON.stringify(notification));
         break;
       case 'postMessage':
-        const messageData = parsedData;
+        const messageData = {
+          id: uuidv4(),
+          type: 'incomingMessage',
+          count: wss._server._connections,
+          username: parsedData.username,
+          content: parsedData.content
+        }
         console.log(`User ${messageData.username} said ${messageData.content}`);
-        messageData.id = uuidv4();
-        messageData.type = 'incomingMessage';
         wss.broadcast(JSON.stringify(messageData));
         break;
     } 
   })
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    console.log('Client disconnected', wss._server._connections)
+    const togglePlural = wss._server._connections > 1 ? "s" : "";
+    const isOrAre = wss._server._connections > 1 ? "are" : "is";
+    const disconnect = {
+      type: 'incomingNotification',
+      content: `A user has disconnected. There ${isOrAre} now ${wss._server._connections} active user${togglePlural}.`,
+      count: wss._server._connections,
+      id: uuidv4()
+    }
+    wss.broadcast(JSON.stringify(disconnect))
+  })
+
 });

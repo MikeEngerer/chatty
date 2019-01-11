@@ -18,6 +18,10 @@ class ChatBar extends Component {
 		}
 	}
 
+	handleFilterToggle = (event) => {
+		this.props.toggleProfanityFilter()
+	}
+
 	render() {
  		
 		return (<footer className="chatbar">
@@ -32,6 +36,7 @@ class ChatBar extends Component {
 				  	placeholder="Type a message and hit ENTER" 
 				  	onKeyPress={this.handleNewMessageOnEnter}
 				  />
+				  <input id="chatbar-checkbox" type="checkbox" onClick={this.handleFilterToggle} defaultChecked/>
 				</footer>);
 	};
 };
