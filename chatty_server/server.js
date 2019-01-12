@@ -31,13 +31,15 @@ wss.broadcast = (data) => {
 }
 
 wss.on('connection', (ws) => {
-  const togglePlural = wss._server._connections > 1 ? "s" : "";
-  const isOrAre = wss._server._connections > 1 ? "are" : "is";
+  const oneOrMore = wss._server._connections > 1 ? 
+    `New user connected! There are now ${wss._server._connections} active users.` : 
+    "Welcome! Its only you in here until others join.";
   const newConnection = {
     type: 'incomingNotification',
-    content: `New user connected! There ${isOrAre} now ${wss._server._connections} active user${togglePlural}.`,
+    content: oneOrMore,
     count: wss._server._connections,
-    id: uuidv4()
+    id: uuidv4(),
+    userColor: assignColor()
   }
   console.log('Client connected, count:', wss._server._connections)
   wss.broadcast(JSON.stringify(newConnection))
@@ -46,6 +48,7 @@ wss.on('connection', (ws) => {
     const parsedData = JSON.parse(data);
     switch (parsedData.type) {
       case 'postNotification':
+        // data object for system message
         const notification = {
           type: 'incomingNotification',
           username: parsedData.name,
@@ -56,17 +59,20 @@ wss.on('connection', (ws) => {
         wss.broadcast(JSON.stringify(notification));
         break;
       case 'postMessage':
+        // data object for user message
         const messageData = {
           id: uuidv4(),
           type: 'incomingMessage',
           count: wss._server._connections,
           username: parsedData.username,
-          content: parsedData.content
+          content: parsedData.content,
+          userColor: parsedData.userColor
         }
         console.log(`User ${messageData.username} said ${messageData.content}`);
         wss.broadcast(JSON.stringify(messageData));
         break;
       case 'postGif':
+        // data obj for GIF message (wip)
         const displayImg = {
           id: uuidv4(),
           type: 'incomingGif',
@@ -81,11 +87,12 @@ wss.on('connection', (ws) => {
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {
     console.log('Client disconnected', wss._server._connections)
-    const togglePlural = wss._server._connections > 1 ? "s" : "";
-    const isOrAre = wss._server._connections > 1 ? "are" : "is";
+    const oneOrMore = wss._server._connections > 1 ? 
+      `There are now ${wss._server._connections} active users.` : 
+      "It's just you left in here. :("
     const disconnect = {
       type: 'incomingNotification',
-      content: `A user has disconnected. There ${isOrAre} now ${wss._server._connections} active user${togglePlural}.`,
+      content: `A user has disconnected. ${oneOrMore}`,
       count: wss._server._connections,
       id: uuidv4()
     }
@@ -95,9 +102,15 @@ wss.on('connection', (ws) => {
 });
 
 function handleUrl(url) {
-  console.log("recieved new link:", url);
+  console.log("recieved new gif:", url);
   let content;
   fetch(url)
     .then(res => res.json())
     .then(json => console.log(json))
+}
+
+function assignColor() {
+ const colors = ['#50c8b4', '#2f4558', '#50c878', '#bdf8d1']
+ const random = Math.floor(Math.random() * Math.floor(3))
+ return colors[random]
 }
