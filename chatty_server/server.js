@@ -4,6 +4,7 @@ const express = require('express');
 const WebSocket = require('ws')
 const SocketServer = require('ws').Server;
 const uuidv4 = require('uuid/v4')
+const fetch = require('node-fetch')
 // Set the port to 3001
 const PORT = 3001;
 
@@ -45,7 +46,6 @@ wss.on('connection', (ws) => {
     const parsedData = JSON.parse(data);
     switch (parsedData.type) {
       case 'postNotification':
-
         const notification = {
           type: 'incomingNotification',
           username: parsedData.name,
@@ -53,7 +53,6 @@ wss.on('connection', (ws) => {
           content: `${parsedData.oldName} changed their name to ${parsedData.newName}`,
           id: uuidv4()
         }
-
         wss.broadcast(JSON.stringify(notification));
         break;
       case 'postMessage':
@@ -66,6 +65,15 @@ wss.on('connection', (ws) => {
         }
         console.log(`User ${messageData.username} said ${messageData.content}`);
         wss.broadcast(JSON.stringify(messageData));
+        break;
+      case 'postGif':
+        const displayImg = {
+          id: uuidv4(),
+          type: 'incomingGif',
+          count: wss._server._connections,
+          content: handleUrl(parsedData.content)
+        }
+        wss.broadcast(JSON.stringify(displayImg));
         break;
     } 
   })
@@ -85,3 +93,11 @@ wss.on('connection', (ws) => {
   })
 
 });
+
+function handleUrl(url) {
+  console.log("recieved new link:", url);
+  let content;
+  fetch(url)
+    .then(res => res.json())
+    .then(json => console.log(json))
+}

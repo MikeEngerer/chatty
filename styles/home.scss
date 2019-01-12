@@ -1,19 +1,20 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700");
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower|Open+Sans');
 @import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css");
 
 h1 {
-  color: tomato;
+  color: #84BE6A;
 }
     body {
       background: white;
       color: black;
       font-family: 'Open Sans', sans-serif;
+      font-family: 'Indie Flower', cursive;
       font-size: 14px;
       margin: 70px 0;
     }
 
     .chatbar {
-      background: tomato;
+      background: #84BE6A;
       border-top: 1px solid black;
       bottom: 0;
       display: flex;
@@ -29,8 +30,24 @@ h1 {
       display: block;
       height: 40px;
       line-height: 40px;
-      margin: 5px;
+      margin: 5px; 
       padding: 0 9px;
+    }
+    .chatbar-filter {
+      background-color: white;
+      border: 1px solid black;
+      display: block;
+      height: 40px;
+      line-height: 40px;
+      margin: 5px; 
+      padding: 0 5px;
+  
+    }
+    .chatbar-checkbox {
+      float: right;
+      margin-top: 10px;
+      height: 20px;
+      width: 20px;
     }
 
     .chatbar-message {
@@ -38,6 +55,7 @@ h1 {
     }
 
     .chatbar-username {
+      text-align: center;
       flex: 2;
     }
 
@@ -47,12 +65,14 @@ h1 {
     }
 
     .message.system {
+      font-size: 17px;
       font-style: italic;
       padding: 5px 20px;
     }
 
     .message-content,
     .message-username {
+      font-size: 20px;
       overflow: hidden;
       margin: 5px;
       padding: 0 10px;
@@ -63,12 +83,13 @@ h1 {
     }
 
     .message-username {
+      background-color: #84BE6A;
       flex: 2;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .navbar {
-      background: tomato;
+      background: #84BE6A;
       border-bottom: 1px solid black;
       height: 60px;
       left: 0;
@@ -78,8 +99,10 @@ h1 {
       top: 0;
     }
       h4 {
+        font-size: 20px;
         float: right;
-        padding-right: 1%
+        padding-right: 0.1%;
+
       }
 
     .navbar-brand {
@@ -87,7 +110,7 @@ h1 {
       display: block;
       float: left;
       font-weight: 700;
-      font-size: 28px;
+      font-size: 40px;
       height: 60px;
       line-height: 60px;
       padding: 0 10px;

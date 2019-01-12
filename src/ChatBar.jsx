@@ -8,7 +8,7 @@ class ChatBar extends Component {
 			this.props.handleNewUsername(event.target.value);
 		}
 	}
-	/* WHenever focus is on msg input and enter is pressed,
+	/* Whenever focus is on msg input and enter is pressed,
 	app.js sends new msg to server for id assignment and processing */
 	handleNewMessageOnEnter = (event) => {
 		if (event.key === 'Enter') {
@@ -18,7 +18,7 @@ class ChatBar extends Component {
 		}
 	}
 
-	handleFilterToggle = (event) => {
+	handleFilterToggle = () => {
 		this.props.toggleProfanityFilter()
 	}
 
@@ -27,7 +27,8 @@ class ChatBar extends Component {
 		return (<footer className="chatbar">
 				  <input
 				  	className="chatbar-username" 
-				  	placeholder="Your Name (Optional)" 
+				  	placeholder="Your Name (Optional)"
+				  	maxLength="30"
 				  	defaultValue={this.props.currentUser.name} 
 				  	onKeyPress={this.handleNewUsernameOnEnter}
 				  />
@@ -36,7 +37,18 @@ class ChatBar extends Component {
 				  	placeholder="Type a message and hit ENTER" 
 				  	onKeyPress={this.handleNewMessageOnEnter}
 				  />
-				  <input id="chatbar-checkbox" type="checkbox" onClick={this.handleFilterToggle} defaultChecked/>
+				  <span className="chatbar-filter">
+					  <label htmlFor="filter">Profanity filter &nbsp;
+					  <input 
+					  	className="chatbar-checkbox"
+					  	type="checkbox"
+					  	onClick={this.handleFilterToggle}
+					  	name="filter"
+					  	defaultChecked
+					  />
+						</label>
+				  </span>
+				 
 				</footer>);
 	};
 };

@@ -33,10 +33,11 @@ class App extends Component {
     // on new msg broadcasted from server, set state with new msg
     this.socket.onmessage = (message) => {
       const parsedMessage = JSON.parse(message.data)
+      parsedMessage.content = this.applyProfanityFilter(parsedMessage.content)
       const oldMessages = this.state.messages;
       const newMessages = [...oldMessages, parsedMessage]
       const userCount = parsedMessage.count
-      this.setState({userCount: userCount, messages:newMessages})
+      this.setState({userCount: userCount, messages: newMessages})
     }
   };
   // takes incoming new currentUser data from chatbar and sets state
@@ -54,7 +55,7 @@ class App extends Component {
     // renders child components (messages, chat bar) + nav bar
     return (<div>
               <nav className="navbar">
-                <a href="/" className="navbar-brand">Chatty</a>
+                <a href="/" className="navbar-brand" >Chatty&nbsp;<i className="fas fa-comment"></i></a>
                 <NavBar userCount={userCount}/>
               </nav>
               <MessageList messages={messages} applyProfanityFilter={applyProfanityFilter}/>
@@ -68,7 +69,7 @@ class App extends Component {
   };
 
   applyProfanityFilter(message) {
-    const filter = new Filter
+    const filter = new Filter;
     let filteredMessage;
     if (this.state.filter) {
       filteredMessage = filter.clean(message)
@@ -95,14 +96,18 @@ class App extends Component {
   };
   // takes incoming messages from ChatBar and sends to server
   handleNewMessage(message) {
-    const filteredMessage = this.applyProfanityFilter(message)
-    const newMessage = {
-      // username defaults to "Anon" if not set
-      type: 'postMessage',
-      username: this.state.currentUser.name ? this.state.currentUser.name : "anon",
-      content: filteredMessage
+    const match = message.match(/(?:giphy)$/)
+    const type = match ? 'postGif' : 'postMessage'
+    // if blank, do nothing
+    if (message) {
+      const newMessage = {
+        // username defaults to "anon" if not set
+        type: type,
+        username: this.state.currentUser.name ? this.state.currentUser.name : "anon",
+        content: message
+      }
+      this.socket.send(JSON.stringify(newMessage))
     }
-    this.socket.send(JSON.stringify(newMessage))
   };
 };
 

@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 class Message extends Component {
 	render() {
 		const type = this.props.messageData.type
+		const img = this.props.messageData.content.match((/(?:png|jpg)$/))
+		console.log(img)
 		if (type === "incomingNotification") {
 			return (<div className="message system">
 			    		{this.props.messageData.content}
@@ -10,10 +12,17 @@ class Message extends Component {
 		} else if (type === "incomingMessage") {
 			return (<div className="message">
 				    	<span className="message-username">{this.props.messageData.username}</span>
+				    	{ img ? 
+				    	<img className="image" src={this.props.messageData.content} /> :
+				    	<span className="message-content">{this.props.messageData.content}</span>
+				    	}
+				  	</div>);
+		} else if (type === "incomingGif") {
+			return (<div className="Gif">
+				    	<span className="message-username">{this.props.messageData.username}</span>
 				    	<span className="message-content">{this.props.messageData.content}</span>
 				  	</div>);
-		} else {
-			<p>test</p>
+
 		}
 	}
 };
