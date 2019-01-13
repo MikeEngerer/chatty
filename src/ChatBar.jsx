@@ -25,6 +25,7 @@ class ChatBar extends Component {
 	render() {
  		
 		return (<footer className="chatbar">
+				
 				  <input
 				  	className="chatbar-username" 
 				  	placeholder="Your Name (Optional)"

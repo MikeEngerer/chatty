@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Indie+Flower|Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Acme');
 @import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css");
 
 h1 {
@@ -8,7 +8,7 @@ h1 {
       background: white;
       color: black;
       font-family: 'Open Sans', sans-serif;
-      font-family: 'Indie Flower', cursive;
+      font-family: 'Acme';
       font-size: 14px;
       margin: 70px 0;
     }
@@ -43,6 +43,11 @@ h1 {
       padding: 0 5px;
   
     }
+
+    .image {
+      max-width: 60%
+    }
+
     .chatbar-checkbox {
       float: right;
       margin-top: 10px;
@@ -83,7 +88,6 @@ h1 {
     }
 
     .message-username {
-      background-color: #84BE6A;
       flex: 2;
       font-weight: 800;
     }

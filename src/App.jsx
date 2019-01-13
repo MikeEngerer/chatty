@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Filter from 'bad-words'
+import Filter from 'bad-words';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 import messageData from './messageData.json';
@@ -10,6 +10,7 @@ class App extends Component {
     super();
     // set initial state 
     this.state = {
+      userColor: null,
       currentUser: {name: ''},
       userCount: null,
       messages: [],
@@ -28,28 +29,33 @@ class App extends Component {
     this.socket = new WebSocket('ws://localhost:3001')
     // Log socket on open
     this.socket.onopen = () => {
-      console.log('WebSocket connected', this.socket)
+      console.log('new WebSocket opened')
     }
     // on new msg broadcasted from server, set state with new msg
     this.socket.onmessage = (message) => {
       const parsedMessage = JSON.parse(message.data)
+      // checks state of prof. filter and mutates message content if true
       parsedMessage.content = this.applyProfanityFilter(parsedMessage.content)
-      const oldMessages = this.state.messages;
-      const newMessages = [...oldMessages, parsedMessage]
-      const userCount = parsedMessage.count
-      this.setState({userCount: userCount, messages: newMessages})
+      // prepare new message data for state
+      const oldMessages = this.state.messages,
+            newMessages = [...oldMessages, parsedMessage],
+            userCount = parsedMessage.count,
+            /* userColor exists as a property of each user as well as each msg
+                msgs from server */
+            userColor = this.state.userColor ? this.state.userColor : parsedMessage.userColor
+      // 
+      this.setState({userColor, userCount, messages: newMessages})
     }
   };
   // takes incoming new currentUser data from chatbar and sets state
 
   render() {
-    // props set to variables for readability
+    // props set to variables for readability in return statement
     const currentUser = this.state.currentUser,
           messages = this.state.messages,
           handleNewMessage = this.handleNewMessage,
           handleNewUsername = this.handleNewUsername,
           userCount = this.state.userCount,
-          applyProfanityFilter = this.applyProfanityFilter,
           toggleProfanityFilter = this.toggleProfanityFilter,
           filterStatus = this.state.filter
     // renders child components (messages, chat bar) + nav bar
@@ -58,7 +64,7 @@ class App extends Component {
                 <a href="/" className="navbar-brand" >Chatty&nbsp;<i className="fas fa-comment"></i></a>
                 <NavBar userCount={userCount}/>
               </nav>
-              <MessageList messages={messages} applyProfanityFilter={applyProfanityFilter}/>
+              <MessageList messages={messages}/>
               <ChatBar 
                 currentUser={currentUser} 
                 handleNewUsername={handleNewUsername} 
@@ -67,21 +73,17 @@ class App extends Component {
               />
             </div>);
   };
-
+  // if filter flag is true, message will be cleaned
   applyProfanityFilter(message) {
     const filter = new Filter;
-    let filteredMessage;
     if (this.state.filter) {
-      filteredMessage = filter.clean(message)
-    } else {
-      filteredMessage = message
+      message = filter.clean(message)
     }
-    return filteredMessage;
+    return message;
   }
-
+  // set filter state on/off (true/false)
   toggleProfanityFilter() {
-    const filter = this.state.filter
-    this.setState({filter: !filter})
+    this.setState({filter: !this.state.filter})
   }
 
   handleNewUsername(username) {
@@ -96,15 +98,14 @@ class App extends Component {
   };
   // takes incoming messages from ChatBar and sends to server
   handleNewMessage(message) {
-    const match = message.match(/(?:giphy)$/)
-    const type = match ? 'postGif' : 'postMessage'
     // if blank, do nothing
     if (message) {
       const newMessage = {
         // username defaults to "anon" if not set
         type: type,
         username: this.state.currentUser.name ? this.state.currentUser.name : "anon",
-        content: message
+        content: message,
+        userColor: this.state.userColor
       }
       this.socket.send(JSON.stringify(newMessage))
     }
