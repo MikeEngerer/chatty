@@ -1,45 +1,39 @@
-React Boilerplate
-=====================
+# Chatty
 
-A minimal and light dev environment for ReactJS.
+An instant messenger SPA powered by REACT and is served using Express & WebSockets.
 
-### Usage
+## Screenshots
 
-Clone the boilerplate and create your own git repo.
+### System notifications
+#### First user connection
+![First user](https://github.com/MikeEngerer/chatty/blob/master/screenshots/Screenshot%20from%202019-01-13%2020-44-48.png "First user")
+#### Name change
+![Name change](https://github.com/MikeEngerer/chatty/blob/master/screenshots/Screenshot%20from%202019-01-13%2020-48-06.png "Name change")
+#### User disconnect
+![User disconnect](https://github.com/MikeEngerer/chatty/blob/master/screenshots/Screenshot%20from%202019-01-13%2020-49-05.png "User disconnect")
+### Additional features
+#### Sending images
+![Sending images](https://github.com/MikeEngerer/chatty/blob/master/screenshots/Screenshot%20from%202019-01-13%2020-53-34.png "Sending images")
+#### Profanity filter
+![Profanity filter](https://github.com/MikeEngerer/chatty/blob/master/screenshots/Screenshot%20from%202019-01-13%2020-50-50.png "Profanity filter")
+## Install/run
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
-
-Install the dependencies and start the server.
+Run these commands from both /chatty and /chatty_server.
 
 ```
 npm install
 npm start
-open http://localhost:3000
 ```
+Then, open <http://localhost:3000/> in browser.
 
-### Static Files
-
-You can store static files like images, fonts, etc in the `build` folder.
-
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Linting
-
-This boilerplate project includes React ESLint configuration.
-
-```
-npm run lint
-```
-
-### Dependencies
+## Dependencies
 
 * React
+* ReactDOM
+* Express
+* ws
 * Webpack
+* uuidv4
+* bad-words
 * [babel-loader](https://github.com/babel/babel-loader)
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
