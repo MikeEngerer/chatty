@@ -102,7 +102,7 @@ class App extends Component {
     if (message) {
       const newMessage = {
         // username defaults to "anon" if not set
-        type: type,
+        type: 'postMessage',
         username: this.state.currentUser.name ? this.state.currentUser.name : "anon",
         content: message,
         userColor: this.state.userColor

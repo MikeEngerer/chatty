@@ -46,6 +46,7 @@ wss.on('connection', (ws) => {
 
   ws.on('message', (data) => {
     const parsedData = JSON.parse(data);
+    console.log(parsedData)
     switch (parsedData.type) {
       case 'postNotification':
         // data object for system message

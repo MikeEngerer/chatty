@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 class Message extends Component {
 	render() {
 		const setColor = {color: this.props.messageData.userColor};
+		
 		const type = this.props.messageData.type
 		const img = this.props.messageData.content.match(/(?:png|jpg)$/)
 		if (type === "incomingNotification") {
@@ -13,7 +14,7 @@ class Message extends Component {
 			return (<div className="message">
 				    	<span className="message-username" style={setColor}>{this.props.messageData.username}</span>
 				    	{ img ? 
-				    		<img className="image" src={this.props.messageData.content} /> :
+				    		<img className="image"  src={this.props.messageData.content} /> :
 				    		<span className="message-content">{this.props.messageData.content}</span>
 				    	}
 				  	</div>);

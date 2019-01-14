@@ -44,8 +44,9 @@ h1 {
   
     }
 
-    .image {
-      max-width: 60%
+    img {
+      max-width: 78.5%;
+      height: auto;
     }
 
     .chatbar-checkbox {
@@ -83,7 +84,8 @@ h1 {
       padding: 0 10px;
     }
 
-    .message-content {
+    .message-content,
+    .image {
       flex: 8;
     }
 
