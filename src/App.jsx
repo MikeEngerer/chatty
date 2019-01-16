@@ -2,13 +2,12 @@ import React, {Component} from 'react';
 import Filter from 'bad-words';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
-import messageData from './messageData.json';
 import NavBar from './NavBar.jsx';
 
 class App extends Component {
   constructor() {
     super();
-    // set initial state 
+    // set initial state --userColor & filter ideally should be contained in currentUser, needs refactoring (wip)
     this.state = {
       userColor: null,
       currentUser: {name: ''},
@@ -40,10 +39,9 @@ class App extends Component {
       const oldMessages = this.state.messages,
             newMessages = [...oldMessages, parsedMessage],
             userCount = parsedMessage.count,
-            /* userColor exists as a property of each user as well as each msg
-                msgs from server */
-            userColor = this.state.userColor ? this.state.userColor : parsedMessage.userColor
-      // 
+            /* userColor declaration only occurs on connection 
+            since this function handles both new connections and new messages this checks if already set */
+            userColor = this.state.userColor || parsedMessage.userColor
       this.setState({userColor, userCount, messages: newMessages})
     }
   };
@@ -73,7 +71,7 @@ class App extends Component {
               />
             </div>);
   };
-  // if filter flag is true, message will be cleaned
+  // if filter flag is true (default), message will be cleaned
   applyProfanityFilter(message) {
     const filter = new Filter;
     if (this.state.filter) {
@@ -85,20 +83,20 @@ class App extends Component {
   toggleProfanityFilter() {
     this.setState({filter: !this.state.filter})
   }
-
+  // takes incoming username change, sends to server and sets state
   handleNewUsername(username) {
     const newUsername = {
       type: 'postNotification',
       oldName: this.state.currentUser.name || "anon",
       newName: username || "anon"
     };
-    console.log("username changed to:", newUsername.name)
+    console.log("username changed to:", newUsername.newName)
     this.socket.send(JSON.stringify(newUsername))
     this.setState({currentUser: {name: username || "anon"}})
   };
   // takes incoming messages from ChatBar and sends to server
   handleNewMessage(message) {
-    // if blank, do nothing
+    // if blank, do nothing (do not allow blank msgs)
     if (message) {
       const newMessage = {
         // username defaults to "anon" if not set

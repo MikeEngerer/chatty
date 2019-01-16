@@ -1,9 +1,14 @@
 import React, {Component} from 'react';
+import Filter from 'bad-words';
 
 class ChatBar extends Component {
 	// Whenever focus is on username input and enter is pressed, app.js changes currentUser state via this handler
 	handleNewUsernameOnEnter = (event) => {
-		if (event.key === 'Enter') {
+		const filter = new Filter;
+		const checkSameName = this.props.currentUser.name === event.target.value
+		const checkBadName = filter.isProfane(event.target.value)
+		// new username not changed if it is the same, or if it contains profanity
+		if (event.key === 'Enter' && !checkSameName && !checkBadName) {
 			event.preventDefault();
 			this.props.handleNewUsername(event.target.value);
 		}
@@ -17,7 +22,7 @@ class ChatBar extends Component {
 			event.target.value = "";
 		}
 	}
-
+	// changes filter status to allow/disallow profanity
 	handleFilterToggle = () => {
 		this.props.toggleProfanityFilter()
 	}
@@ -25,7 +30,6 @@ class ChatBar extends Component {
 	render() {
  		
 		return (<footer className="chatbar">
-				
 				  <input
 				  	className="chatbar-username" 
 				  	placeholder="Your Name (Optional)"
@@ -39,7 +43,7 @@ class ChatBar extends Component {
 				  	onKeyPress={this.handleNewMessageOnEnter}
 				  />
 				  <span className="chatbar-filter">
-					  <label htmlFor="filter">Profanity filter &nbsp;
+					<label htmlFor="filter">Profanity filter &nbsp;
 					  <input 
 					  	className="chatbar-checkbox"
 					  	type="checkbox"
@@ -47,12 +51,10 @@ class ChatBar extends Component {
 					  	name="filter"
 					  	defaultChecked
 					  />
-						</label>
+					</label>
 				  </span>
-				 
 				</footer>);
 	};
 };
-
 
 export default ChatBar;
