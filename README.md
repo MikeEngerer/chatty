@@ -18,7 +18,7 @@ An instant messenger SPA powered by REACT and is served using Express & WebSocke
 ![Profanity filter](https://github.com/MikeEngerer/chatty/blob/master/screenshots/Screenshot%20from%202019-01-13%2020-50-50.png "Profanity filter")
 ## Install/run
 
-Run these commands from both /chatty and /chatty_server.
+Run these commands from both /chatty and /chatty/chatty_server.
 
 ```
 npm install
